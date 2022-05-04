@@ -1,57 +1,79 @@
 import json
 import requests
+import pymongo
 from bs4 import BeautifulSoup
 
-start_url = 'https://ru.wikipedia.org/wiki/%D0%9F%D1%81%D0%B5%D0%B2%D0%B4%D0%BE%D0%BD%D0%B8%D0%BC'
 
-data = []
-
-def crawl(url, depth):
+class Crawler():
     try:
-        print('Кравлим url %s и depth %d' % (url, depth))
-        response = requests.get(url)
+        connect_uri = 'mongodb://root:root@localhost:27017' #example
+        client = pymongo.MongoClient(connect_uri)
+        db = client.search
+        print(db)
     except:
-        print("Невозможно сделать запрос на '%s'\n" % url)
-        return
+        print('Ошибка подключения к бд :(')
+ 
 
-    content  = BeautifulSoup(response.text, 'lxml')
+    search_results = []
 
-    title = content.find('title').text
-    description = content.get_text()
+    def crawl(self, url, depth):
+        try:
+            print("Кравлим url = %s  depth = %d" % (url, depth))
+            response = requests.get(url, headers={'user-agent': 'glacier-crawler'})
+        except:
+            print("Невозможно сделать запрос на '%s'\n" % url)
+            return
 
-    if description is None:
-        description = ''
-    else:
-        description = description.strip().replace('\n', ' ')
+        content  = BeautifulSoup(response.text, 'lxml')
 
-    result = {
-        'url': url,
-        'title': title,
-        'description': description
-    }
+        try:
+            title = content.find('title').text
+            description = ''
 
-    data.append(result)
+            for tag in content.findAll():
+                if tag.name == 'p':
+                    description += tag.text.strip().replace('\n', '')
+        except:
+            return
 
-    if depth == 0:
-        return
+        result = {
+            'url': url,
+            'title': title,
+            'description': description
+        }
 
-    try:
+        self.search_results.append(result)
+
+        if depth == 0:
+            return
+
         links = content.findAll('a')
-    except:
-        return
 
-    for link in links:
-        try:            
-            if 'http' not in link['href']:
-                follow_url = url + link['href']
-            else:
-                follow_url = link['href']
+        for link in links:
+            try:            
+                if 'http' in link['href']:
+                    self.crawl(link['href'], depth - 1)
+            except KeyError:
+                pass
 
-            crawl(follow_url, depth - 1)
-        except KeyError:
-            pass
-    
-    return result
+    def insert_results(self):
+        search_results = self.db.search_results
+        search_results.insert_many(self.search_results)
+        search_results.create_index([
+            ('url', pymongo.TEXT),
+            ('title', pymongo.TEXT),
+            ('description', pymongo.TEXT)
+        ], name='search_results', default_language='english')
 
-crawl(start_url, 2)
-print(len(data))
+    # def printData(self):
+    #     for entry in self.search_results:
+    #         print(json.dumps(entry))
+
+    #     for entry in self.db.search_results.find({"$text": {"$search": "Welcome"}}):
+    #         print(entry)
+
+
+crawler = Crawler()
+crawler.crawl("https://proglib.io/p/algorithmic-tasks", 2)
+crawler.insert_results()
+# crawler.printData()

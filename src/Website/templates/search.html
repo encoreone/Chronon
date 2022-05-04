@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style type="text/css">
+  .material-icons.md-48 { font-size: 25px; color: #555; margin-right: 15px;}
+</style>
+
+<section class="navbar navbar-expand-md navbar-light bg-light">
+  <header>
+    <ul>
+      <li>
+        <a href=""> 
+          <i class="material-icons md-48">settings</i>
+        </a>
+      </li>
+    </ul>
+  </header>
+
+  <div class="main">
+    <div class="text">
+      <span>C</span>
+      <span>H</span>
+      <span>R</span>
+      <span>O</span>
+      <span>N</span>
+      <span>O</span>
+      <span>N</span>
+    </div>
+
+    <div class="searchBox">
+      <form name="search" action="/search_results">
+        <input autofocus type="text" name="search" class="search">
+        <div class="icons">
+          <div> <img src="{{ url_for('static', filename='glass.png') }}" alt="лупа"> </div>
+          <div> <a href=""> <img class="pic" src="{{ url_for('static', filename='mic.png') }}" alt="микро"> </a> </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- <div class="buttons">
+      <div>
+        <h1>Котировки</h1>
+      </div>
+      <button>Im feeling lucky</button>
+      <button>Im feeling lucky</button>
+    </div>
+
+
+    <div class="Row">
+      <div class="Column">Котировки
+     
+
+      </div>
+      <div class="Column">C2</div>
+      <div class="Column">C3</div>
+    </div>
+    
+  </div> -->
+
+  <div class="footer">
+    <!-- <div class="row row2">
+      <ul>
+        <li><a href="">О нас</a></li>
+        <li><a href="">Как работает поиск</a></li>
+        <li><a href="">3</a></li>
+        <li><a href="">4</a></li>
+      </ul>
+      <ul>
+        <li><a href="">1</a></li>
+        <li><a href="">2</a></li>
+        <li><a href="">3</a></li>
+      </ul>
+    </div> -->
+  </div>
+</section>
+
+
+
+{% endblock %}

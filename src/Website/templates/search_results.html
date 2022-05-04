@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <div>
+    <form name="search" action="/search_results">
+      <div>
+        <input class="input is-rounded" type="text" name="search" placeholder="Rounded input">
+        <!-- <button type="submit">ПОИСК</button> -->
+      </div>
+    </form>
+  </div>
+
+  <div ></div>
+  
+  <div >
+    {% if len(search_results) == 0 %}
+      <strong>Нет результатов =( </strong>
+    {% endif %}
+    
+    {% for link in search_results %}
+      <div >
+        
+        <div >
+        <strong><a href="{{ link.url }}">{{ link.title }}</a></strong>
+        </div>
+        
+        <div >
+          <a href="{{ link.url }}">{{ link.url }}</a>
+          <p>{{ link.description[:300] }}...</p>
+        </div>
+      </div>
+    {% endfor %}
+    
+    <!-- Pagination -->
+	  <div >
+      {{ pagination.links }}
+	  </div>
+  </div>
+{% endblock %}
