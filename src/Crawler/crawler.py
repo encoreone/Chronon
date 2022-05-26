@@ -1,4 +1,5 @@
 import json
+import threading
 import requests
 import pymongo
 from bs4 import BeautifulSoup
@@ -24,11 +25,13 @@ class Crawler():
             print("Невозможно сделать запрос на '%s'\n" % url)
             return
 
-        content  = BeautifulSoup(response.text, 'lxml')
+        content  = BeautifulSoup(response.text, 'html.parser')
 
         try:
             title = content.find('title').text
             description = ''
+            score = 0
+            popularity = ''
 
             for tag in content.findAll():
                 if tag.name == 'p':
@@ -39,7 +42,9 @@ class Crawler():
         result = {
             'url': url,
             'title': title,
-            'description': description
+            'description': description,
+            'score': score,
+            'popularity': popularity
         }
 
         self.search_results.append(result)
@@ -62,7 +67,9 @@ class Crawler():
         search_results.create_index([
             ('url', pymongo.TEXT),
             ('title', pymongo.TEXT),
-            ('description', pymongo.TEXT)
+            ('description', pymongo.TEXT),
+            ('score', pymongo.TEXT),
+            ('popularity', pymongo.TEXT)
         ], name='search_results', default_language='english')
 
     # def printData(self):
@@ -74,6 +81,6 @@ class Crawler():
 
 
 crawler = Crawler()
-crawler.crawl("https://proglib.io/p/algorithmic-tasks", 2)
+crawler.crawl("https://stackoverflow.com/questions/18595686/how-do-operator-itemgetter-and-sort-work", 1)
 crawler.insert_results()
 # crawler.printData()

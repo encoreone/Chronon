@@ -1,39 +1,42 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <div>
-    <form name="search" action="/search_results">
-      <div>
-        <input class="input is-rounded" type="text" name="search" placeholder="Rounded input">
-        <!-- <button type="submit">ПОИСК</button> -->
-      </div>
-    </form>
-  </div>
 
-  <div ></div>
-  
-  <div >
-    {% if len(search_results) == 0 %}
-      <strong>Нет результатов =( </strong>
-    {% endif %}
-    
-    {% for link in search_results %}
-      <div >
-        
-        <div >
-        <strong><a href="{{ link.url }}">{{ link.title }}</a></strong>
+  <div class="">
+    <div class="searchBox">
+      <form name="search" action="/search_results">
+        <div class="searchBox">
+          <input class="search" type="text" name="search" placeholder="Поиск">
+          <!-- <button type="submit">ПОИСК</button> -->
         </div>
-        
-        <div >
-          <a href="{{ link.url }}">{{ link.url }}</a>
-          <p>{{ link.description[:300] }}...</p>
-        </div>
+      </form>
+    </div>
+
+    <div class="container mx-5 mt-5">
+        <p style="color: teal;"><b>Результаты для '{{search_string}}'</b></p>
+    </div>
+
+    {% if search_result %}
+      {% for link in search_result %}
+      <div class="container mt-3" style="width:90%">
+          <div class="col">
+            <a href="{{ link.url }}" target="_blank"><cite>{{ link.url[:50]}}</cite></a>
+          </div>
+
+          <div class="col">
+              <strong><a href="{{ link.url }}" target="_blank">{{ link.title }}</a></strong>
+              <p>{{ link.description[:300] }}...</p>
+          </div>
       </div>
-    {% endfor %}
-    
-    <!-- Pagination -->
-	  <div >
-      {{ pagination.links }}
-	  </div>
+      {% endfor %}
+    {% else %}
+      <p>Нет результатов =( </p>
+      <p>Мой создатель уже работает над этим! </p>
+    {% endif %}
+
+    <div class="col mb-5 mt-2 text-center">
+        {{pagination.links}}
+    </div>
   </div>
+  
 {% endblock %}

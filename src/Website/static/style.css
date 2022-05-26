@@ -155,7 +155,10 @@ section .footer .row.row2 ul:nth-child(2) li a {
     margin-left: 25px;
 }
 
-
+section .index {
+    margin: 0;
+    padding: 0;
+}
 
 .text{
     font-size: 80px;
