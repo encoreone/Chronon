@@ -1,30 +1,14 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<style type="text/css">
-  .material-icons.md-48 { font-size: 25px; color: #555; margin-right: 15px;}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
 
-<section class="navbar navbar-expand-md navbar-light bg-light">
-  <header>
-    <ul>
-      <li>
-        <a href=""> 
-          <i class="material-icons md-48">settings</i>
-        </a>
-      </li>
-    </ul>
-  </header>
-
+<section>
   <div class="main">
-    <div class="text">
-      <span>C</span>
-      <span>H</span>
-      <span>R</span>
-      <span>O</span>
-      <span>N</span>
-      <span>O</span>
-      <span>N</span>
+    <div class="search__text">
+      <a href="/">
+        CHRONON
+      </a>
     </div>
 
     <div class="searchBox">
@@ -32,11 +16,14 @@
         <input autofocus type="text" name="search" class="search">
         <div class="icons">
           <div> <img src="{{ url_for('static', filename='glass.png') }}" alt="лупа"> </div>
-          <div> <a href="#"> <img class="pic" src="{{ url_for('static', filename='mic.png') }}" alt="микро"> </a> </div>
+          <div>
+            <a href="/"> 
+              <img class="pic" src="{{ url_for('static', filename='mic.png') }}" alt="микро">
+            </a> 
+          </div>
         </div>
       </form>
     </div>
-
 
    
     

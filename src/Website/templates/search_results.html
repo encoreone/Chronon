@@ -2,41 +2,58 @@
 
 {% block body %}
 
-  <div class="">
-    <div class="searchBox">
-      <form name="search" action="/search_results">
-        <div class="searchBox">
-          <input class="search" type="text" name="search" placeholder="Поиск">
-          <!-- <button type="submit">ПОИСК</button> -->
+    <header class="header">
+      <div class="wrapper">
+        <div class="header__wrapper">
+          <div class="header__logo">
+            <a href="/">
+              CHRONON
+            </a>
+          </div>
+          <div class="header__searcher">
+            <div class="search__box">
+              <form name="search" action="/search_results">
+                <input autofocus name="search" type="text" class="search">
+                <div class="icons">
+                  <div><img src="{{ url_for('static', filename='glass.png') }}" alt="лупа"></div>
+                  <div> <a href="#"> <img src="{{ url_for('static', filename='mic.png') }}" alt="микро"> </a> </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <nav class="header__nav">
+            <ul class="header__list">
+              <li class="header__item"><a href="#" class="header__link"><i class="gg-menu-grid-r"></i></a></li>
+            </ul>
+          </nav>
         </div>
-      </form>
-    </div>
-
-    <div class="container mx-5 mt-5">
-        <p style="color: teal;"><b>Результаты для '{{search_string}}'</b></p>
-    </div>
-
-    {% if search_result %}
-      {% for link in search_result %}
-      <div class="container mt-3" style="width:90%">
-          <div class="col">
-            <a href="{{ link.url }}" target="_blank"><cite>{{ link.url[:50]}}</cite></a>
-          </div>
-
-          <div class="col">
-              <strong><a href="{{ link.url }}" target="_blank">{{ link.title }}</a></strong>
-              <p>{{ link.description[:300] }}...</p>
-          </div>
       </div>
-      {% endfor %}
-    {% else %}
-      <p>Нет результатов =( </p>
-      <p>Мой создатель уже работает над этим! </p>
-    {% endif %}
-
-    <div class="col mb-5 mt-2 text-center">
-        {{pagination.links}}
-    </div>
-  </div>
+    </header>
+    
+    <main class="main">
+      <section class="result">
+        <div class="wrapper">
+          <span class="string__result">Результаты по запросу: '{{search_string}}'</span>
+          <div class="search__result">
+            {% if search_result %}
+              {% for link in search_result %}
+                <!-- <p><a href="{{ link.url }}" target="_blank">{{ link.url[:50]}}</a></p> -->
+                <p>
+                  <a href="{{ link.url }}" target="_blank">{{ link.title }}</a>
+                  <br>
+                    {{ link.description[:300] }}...
+                </p>
+              {% endfor %}
+            {% else %}
+              <p class="error__text">Нет результатов =(</p>
+              <img class="img__error" src="{{ url_for('static', filename='error.png') }}" alt="error">
+            {% endif %}
+            <div class="pagination">
+              {{ pagination.links }}
+            </div>
+           </div>
+         </div>
+      </section>
+    </main>
   
 {% endblock %}

@@ -9,7 +9,7 @@ class Crawler():
     try:
         connect_uri = 'mongodb://root:root@localhost:27017' #example
         client = pymongo.MongoClient(connect_uri)
-        db = client.search
+        db = client.results
         print(db)
     except:
         print('Ошибка подключения к бд :(')
@@ -81,6 +81,6 @@ class Crawler():
 
 
 crawler = Crawler()
-crawler.crawl("https://stackoverflow.com/questions/18595686/how-do-operator-itemgetter-and-sort-work", 1)
+crawler.crawl("https://ru.wikipedia.org/wiki/Google_(%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F)", 1)
 crawler.insert_results()
 # crawler.printData()
