@@ -1,7 +1,4 @@
-
 from operator import itemgetter
-import string
-
 
 class Ranking:
     def __init__(self, results, query):
@@ -18,7 +15,7 @@ class Ranking:
             mytable = self.query.maketrans(x, y, z)
             res.insert(0, self.query.translate(mytable))
         else:
-            if ':' in self.query:  
+            if ':' in self.query:
                 key = self.query.split(':')[0]
                 fil = self.query.split(':')[1]
                 print(key)
@@ -41,6 +38,7 @@ class Ranking:
         return res
 
     def ranked_results(self):
+
         keywords = self.search()
         for key in keywords:
             for result in self.results:

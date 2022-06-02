@@ -13,12 +13,15 @@
           <div class="header__searcher">
             <div class="search__box">
               <form name="search" action="/search_results">
-                <input autofocus name="search" type="text" class="search">
+                <input autocomplete="off" autofocus name="search" id="search" type="text" class="search">
                 <div class="icons">
                   <div><img src="{{ url_for('static', filename='glass.png') }}" alt="лупа"></div>
-                  <div> <a href="#"> <img src="{{ url_for('static', filename='mic.png') }}" alt="микро"> </a> </div>
+                  <div class="img__link"> <a href="#"> <img src="{{ url_for('static', filename='mic.png') }}" alt="микро"> </a> </div>
                 </div>
               </form>
+              <!-- <div class="suggestions">
+                <ul></ul>
+              </div> -->
             </div>
           </div>
           <nav class="header__nav">
@@ -55,5 +58,5 @@
          </div>
       </section>
     </main>
-  
+
 {% endblock %}

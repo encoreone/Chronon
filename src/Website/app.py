@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 import pymongo
-import os
 from flask_paginate import Pagination, get_page_args
 from ranking import Ranking
 from query_processing import QueryProcessing

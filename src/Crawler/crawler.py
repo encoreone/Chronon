@@ -1,86 +1,114 @@
-import json
-import threading
+from bs4 import BeautifulSoup
 import requests
 import pymongo
-from bs4 import BeautifulSoup
+import os
+import urllib.parse
+from popular_links import Popularity
+import sys
 
 
 class Crawler():
-    try:
-        connect_uri = 'mongodb://root:root@localhost:27017' #example
-        client = pymongo.MongoClient(connect_uri)
-        db = client.results
-        print(db)
-    except:
-        print('Ошибка подключения к бд :(')
- 
+    connect_url = 'mongodb://root:root@localhost:27017/'
+
+    client = pymongo.MongoClient(connect_url)
+
+    db = client.results
 
     search_results = []
 
-    def crawl(self, url, depth):
+    url_count = 1
+
+    def start_crawl(self, url, depth):
+        robot_url = urllib.parse.urljoin(url, '/robots.txt')
         try:
-            print("Кравлим url = %s  depth = %d" % (url, depth))
-            response = requests.get(url, headers={'user-agent': 'glacier-crawler'})
-        except:
-            print("Невозможно сделать запрос на '%s'\n" % url)
+            robots = requests.get(robot_url)
+        except BaseException:
+            print("robots не найден")
+            self.crawl(url, depth)
+
+        soup = BeautifulSoup(robots.text, 'lxml')
+
+        content = soup.find('p').text
+
+        disallowed_links = []
+
+        for word in content:
+            if word[0] == '/':
+                disallowed_links.append(urllib.parse.urljoin(url, word))
+            else:
+                disallowed_links.append(word)
+        print("!!!")
+        self.crawl(url, depth, disallowed_links)
+
+    def crawl(self, url, depth, *disallowed_links):
+
+        try:
+            print(f'URL пройден {self.url_count}: {url} глубина: {depth}')
+            self.url_count += 1
+            response = requests.get(url)
+
+        except BaseException:
+            print(f'Не удалось выполнить запрос HTTP GET на {url}')
             return
 
-        content  = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.text, 'lxml')
 
         try:
-            title = content.find('title').text
+            title = soup.find('title').text
             description = ''
-            score = 0
-            popularity = ''
 
-            for tag in content.findAll():
+            for tag in soup.findAll():
                 if tag.name == 'p':
                     description += tag.text.strip().replace('\n', '')
-        except:
+
+        except BaseException:
+            print("Не удалось получить название и описание\n")
             return
 
-        result = {
+        popularity = Popularity(url)
+        popularity_score = popularity.popularity_score()
+
+        query = {
             'url': url,
             'title': title,
             'description': description,
-            'score': score,
-            'popularity': popularity
+            'score': 0,
+            'popularity': popularity_score,
         }
 
-        self.search_results.append(result)
-
-        if depth == 0:
-            return
-
-        links = content.findAll('a')
-
-        for link in links:
-            try:            
-                if 'http' in link['href']:
-                    self.crawl(link['href'], depth - 1)
-            except KeyError:
-                pass
-
-    def insert_results(self):
         search_results = self.db.search_results
-        search_results.insert_many(self.search_results)
+
+        search_results.insert_one(query)
+
         search_results.create_index([
             ('url', pymongo.TEXT),
             ('title', pymongo.TEXT),
             ('description', pymongo.TEXT),
-            ('score', pymongo.TEXT),
-            ('popularity', pymongo.TEXT)
+            ('score', 1),
+            ('popularity', 1)
         ], name='search_results', default_language='english')
 
-    # def printData(self):
-    #     for entry in self.search_results:
-    #         print(json.dumps(entry))
+        if depth == 0:
+            return
 
-    #     for entry in self.db.search_results.find({"$text": {"$search": "Welcome"}}):
-    #         print(entry)
+        links = soup.findAll('a')
+
+        for link in links:
+            try:
+                if link['href'] not in disallowed_links:
+                    if 'http' in link['href']:
+                        self.crawl(link['href'], depth - 1)
+                    else:
+                        link['href'] = urllib.parse.urljoin(url, link['href'])
+                        self.crawl(link['href'], depth-1)
+            except KeyError:
+                print("нет ссылок")
+                pass
+
+        self.client.close()
 
 
 crawler = Crawler()
-crawler.crawl("https://ru.wikipedia.org/wiki/Google_(%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F)", 1)
-crawler.insert_results()
-# crawler.printData()
+
+crawler.start_crawl(
+    sys.argv[1], int(sys.argv[2]))

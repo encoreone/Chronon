@@ -1,13 +1,9 @@
-"""
-Program to process the search_query.
-"""
-
 import nltk
 nltk.download('punkt')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
-#pythofrom spellchecker import SpellChecker
+from spellchecker import SpellChecker
 import string
 
 class QueryProcessing():
@@ -31,7 +27,8 @@ class QueryProcessing():
         stemmer = PorterStemmer()
         tokens = [stemmer.stem(word) for word in tokens]
 
-        #for i in range(len(tokens)):
-            #tokens[i] = spell.correction(tokens[i])
-
+        spell = SpellChecker()
+        for i in range(len(tokens)):
+            tokens[i] = spell.correction(tokens[i])
+        
         return tokens
