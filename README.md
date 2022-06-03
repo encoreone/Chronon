@@ -9,6 +9,9 @@
 <li>Crawler with good parse for testing</p>
 
 <p>Pet-project to understand how search engins like Google works</p>
+![image](https://github.com/encoreone/Chronon/blob/master/src/Test/preview.gif)
+preview:
+https://github.com/encoreone/Chronon/blob/master/src/Test/preview.gif
 <hr>
 <h2>Requirements</h2>
     <li>python 3 / pip</li>
