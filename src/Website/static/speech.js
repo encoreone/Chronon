@@ -1,26 +1,27 @@
-const sb = document.querySelector('#search');
+const voice = document.querySelector('#voice');
+const inputOne = document.querySelector('#search');
+const resultForm = document.querySelector('#form');
 
 
-window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let promise = voice.addEventListener('click', () => {
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const rec = new window.SpeechRecognition();
-rec.interimResults = true;
+    const rec = new window.SpeechRecognition();
+    rec.interimResults = true;
+        
+    rec.addEventListener('result', (e) => {
+    
+        const text = Array.from(e.results)
+            .map(results => results[0])
+            .map(results => results.transcript)
+            .join('');
 
+        inputOne.value = text
 
-let kek = document.createElement('input');
-
-rec.addEventListener('result', (e) => {
-
-    const text = Array.from(e.results)
-        .map(results => results[0])
-        .map(results => results.transcript)
-        .join('');
-
-        kek.innerHTML = text;
-
-    sb.appendChild(kek);
-
-    console.log(text);
+        setTimeout(function () {
+            resultForm.submit();
+        }, 2000)
+    })
+    
+    rec.start();
 })
-
-rec.start();

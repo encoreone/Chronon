@@ -1,7 +1,6 @@
 const input = document.querySelector('#search');
 const suggestions = document.querySelector('.suggestions ul');
 
-
 const keywords = [
     'Wikipedia',
     'Wildberries',
@@ -38,8 +37,6 @@ function showSuggestions(results, inputVal) {
 	if (results.length > 0) {
 		for (i = 0; i < results.length; i++) {
 			let item = results[i];
-			// Highlights only the first match
-			// TODO: highlight all matches
 			const match = item.match(new RegExp(inputVal, 'i'));
 			item = item.replace(match[0], `<strong>${match[0]}</strong>`);
 			suggestions.innerHTML += `<li>${item}</li>`;
