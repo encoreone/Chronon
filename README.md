@@ -1,4 +1,4 @@
-<h1>Mini Web Search-Engine project</h1>
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?size=25&color=0024F7&width=409&lines=Mini+Search+Engine+Project+)](https://git.io/typing-svg)
 <hr>
 <h1>Chronon:</h1>
 <h2>Crawler, Database(mongo), and FrontFace:</h2>
@@ -9,6 +9,10 @@
 <li>Crawler with good parse for testing</p>
 
 <p>Pet-project to understand how search engins like Google works</p>
+
+[![Preview](https://github.com/encoreone/Chronon/blob/master/src/Test/preview.gif)]([https://git.io/typing-svg](https://github.com/encoreone/Chronon))
+
+
 <hr>
 <h2>Requirements</h2>
     <li>python 3 / pip</li>

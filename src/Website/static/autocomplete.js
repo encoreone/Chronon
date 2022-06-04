@@ -1,12 +1,28 @@
 const input = document.querySelector('#search');
 const suggestions = document.querySelector('.suggestions ul');
-
 const keywords = [
     'Wikipedia',
     'Wildberries',
     'Winrar',
-    'Windows'
+    'Windows',
+	'Википедия',
+	'Google',
+	'Yandex',
+	'Яндекс',
+	'Apple',
+	'Amazon',
+	'Steam',
+	'DNS',
+	'Днс',
+	'Кошки',
+	'Собаки',
+	'Планеты',
+	'Илон Маск',
+	'Цвет',
+	'Javascript',
+	'Поисковая система'
 ];
+
 
 function search(str) {
 	let results = [];

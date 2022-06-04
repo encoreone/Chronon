@@ -31,7 +31,10 @@ class Popularity():
         'https://yandex.ru/',
         'https://ru.wiktionary.org/',
         'https://www.amazon.com/',
-        'https://gb.ru/'
+        'https://gb.ru/',
+        'https://www.wildberries.ru/',
+        'https://www.dns-shop.ru/',
+        'https://store.steampowered.com/'
     ]
 
     ps = 0
